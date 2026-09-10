@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Class Records | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <strong>ARPS</strong>
+                <small>Student Risk System</small>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                🏠
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('professors') }}" class="nav-item">
+                👨‍🏫
+                <span>Professors</span>
+            </a>
+
+            <a href="{{ url_for('students') }}" class="nav-item">
+                🎓
+                <span>Students</span>
+            </a>
+
+            <a href="{{ url_for('courses') }}" class="nav-item">
+                📚
+                <span>Courses</span>
+            </a>
+
+            <a href="{{ url_for('classes') }}" class="nav-item">
+                🏫
+                <span>Classes</span>
+            </a>
+
+            <a href="{{ url_for('academic_records') }}"
+               class="nav-item active">
+                📝
+                <span>Academic Records</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                🤖
+                <span>Predictions</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📖
+                <span>Learning Modules</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📊
+                <span>Reports</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                ⚙️
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+
+            🚪
+            <span>Logout</span>
+
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>Class Academic Records</h1>
+
+                <p>
+                    Manage academic records for students in this class.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('academic_records') }}"
+               class="btn">
+
+                ← Back to Academic Records
+
+            </a>
+
+        </header>
+
+
+        <!-- CLASS INFORMATION -->
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        {{ class_record["course_code"] }}
+                    </h2>
+
+                    <p>
+                        {{ class_record["course_title"] }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <p>
+                <strong>Professor:</strong>
+                {{ class_record["professor_first_name"] }}
+                {{ class_record["professor_last_name"] }}
+            </p>
+
+
+            <p>
+                <strong>Section:</strong>
+                {{ class_record["section"] or "-" }}
+            </p>
+
+
+            <p>
+                <strong>School Year:</strong>
+                {{ class_record["school_year"] or "-" }}
+            </p>
+
+
+            <p>
+                <strong>Semester:</strong>
+                {{ class_record["semester"] or "-" }}
+            </p>
+
+        </section>
+
+
+        <!-- STUDENTS -->
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Students</h2>
+
+                    <p>
+                        {{ students|length }} student(s) enrolled
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <a
+                        href="{{ url_for('enroll_student', class_id=class_record['class_id']) }}"
+                        class="btn btn-primary">
+
+                        + Enroll Student
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            {% if students %}
+
+
+            <!-- STUDENT TABLE -->
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Student Number</th>
+
+                            <th>Student Name</th>
+
+                            <th>Course</th>
+
+                            <th>Year Level</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for student in students %}
+
+                        <tr>
+
+                            <td>
+                                {{ student["student_number"] }}
+                            </td>
+
+
+                            <td>
+
+                                {{ student["first_name"] }}
+                                {{ student["last_name"] }}
+
+                            </td>
+
+
+                            <td>
+                                {{ student["course"] or "-" }}
+                            </td>
+
+
+                            <td>
+                                {{ student["year_level"] or "-" }}
+                            </td>
+
+
+                            <td>
+
+                                <!-- FIXED ACADEMIC RECORD LINK -->
+
+                                <a
+                                    href="{{ url_for(
+                                        'student_academic_record',
+                                        class_id=class_record['class_id'],
+                                        student_id=student['student_id']
+                                    ) }}"
+                                    class="btn btn-small">
+
+                                    Academic Record
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- EMPTY STATE -->
+            <div class="empty-state">
+
+                <div>🎓</div>
+
+                <p>
+                    No students enrolled yet.
+                </p>
+
+                <small>
+                    Click "Enroll Student" to add a student to this class.
+                </small>
+
+                <br>
+                <br>
+
+                <a
+                    href="{{ url_for('enroll_student', class_id=class_record['class_id']) }}"
+                    class="btn btn-primary">
+
+                    + Enroll Student
+
+                </a>
+
+            </div>
+
+
+            {% endif %}
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

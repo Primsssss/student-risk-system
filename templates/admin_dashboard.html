@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <strong>ARPS</strong>
+                <small>Student Risk System</small>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item active">
+    🏠
+    <span>Dashboard</span>
+</a>
+
+            <a href="{{ url_for('professors') }}" class="nav-item">
+    👨‍🏫
+    <span>Professors</span>
+</a>
+
+            <a href="{{ url_for('students') }}" class="nav-item">
+    🎓
+    <span>Students</span>
+</a>
+
+            <a href="{{ url_for('courses') }}" class="nav-item">
+    📚
+    <span>Courses</span>
+</a>
+<a href="{{ url_for('classes') }}" class="nav-item">
+    🏫
+    <span>Classes</span>
+</a>
+            <a href="{{ url_for('academic_records') }}" class="nav-item">
+    📝
+    <span>Academic Records</span>
+</a>
+
+            <a href="{{ url_for('predictions') }}"
+   class="nav-item">
+    🤖
+    <span>Predictions</span>
+</a>
+
+            <a href="#" class="nav-item">
+                📖
+                <span>Learning Modules</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📊
+                <span>Reports</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                ⚙️
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+            🚪
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <h1>Admin Dashboard</h1>
+
+                <p>
+                    Welcome, {{ session["username"] }}!
+                </p>
+            </div>
+
+            <div class="admin-profile">
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <small>System Admin</small>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- STAT CARDS -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon professor-icon">
+                    👨‍🏫
+                </div>
+
+                <div>
+                    <span>Professors</span>
+                    <strong>{{ professor_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon student-icon">
+                    👨‍🎓
+                </div>
+
+                <div>
+                    <span>Students</span>
+                    <strong>{{ student_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon course-icon">
+                    📚
+                </div>
+
+                <div>
+                    <span>Courses</span>
+                    <strong>{{ course_count }}</strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon prediction-icon">
+                    🤖
+                </div>
+
+                <div>
+                    <span>Total Predictions</span>
+                    <strong>{{ prediction_count }}</strong>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- DASHBOARD GRID -->
+        <section class="dashboard-grid">
+
+
+            <!-- RISK OVERVIEW -->
+            <div class="dashboard-card">
+
+                <div class="card-header">
+                    <div>
+                        <h2>Risk Level Overview</h2>
+                        <p>Current prediction distribution</p>
+                    </div>
+                </div>
+
+
+                <div class="risk-list">
+
+                    <div class="risk-row">
+
+                        <div class="risk-label">
+                            <span class="risk-dot low"></span>
+                            Low Risk
+                        </div>
+
+                        <strong>{{ low_risk }}</strong>
+
+                    </div>
+
+
+                    <div class="risk-row">
+
+                        <div class="risk-label">
+                            <span class="risk-dot moderate"></span>
+                            Moderate Risk
+                        </div>
+
+                        <strong>{{ moderate_risk }}</strong>
+
+                    </div>
+
+
+                    <div class="risk-row">
+
+                        <div class="risk-label">
+                            <span class="risk-dot high"></span>
+                            High Risk
+                        </div>
+
+                        <strong>{{ high_risk }}</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT PREDICTIONS -->
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h2>Recent Predictions</h2>
+                        <p>Latest student risk results</p>
+                    </div>
+
+                </div>
+
+
+                {% if recent_predictions %}
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Risk</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for prediction in recent_predictions %}
+
+                            <tr>
+
+                                <td>
+                                    {{ prediction["first_name"] }}
+                                    {{ prediction["last_name"] }}
+                                </td>
+
+                                <td>
+
+                                    {% if prediction["risk_level"] == "Low" %}
+
+                                        <span class="badge low-badge">
+                                            Low
+                                        </span>
+
+                                    {% elif prediction["risk_level"] == "Moderate" %}
+
+                                        <span class="badge moderate-badge">
+                                            Moderate
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge high-badge">
+                                            High
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+                                    {{ prediction["predicted_at"] }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                    <div class="empty-state">
+                        <div>🤖</div>
+
+                        <p>
+                            No predictions yet.
+                        </p>
+
+                        <small>
+                            Predictions will appear here once
+                            academic records are analyzed.
+                        </small>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- SYSTEM INFORMATION -->
+        <section class="dashboard-card system-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>System Overview</h2>
+
+                    <p>
+                        Student academic risk prediction and
+                        intervention monitoring system.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="system-features">
+
+                <div class="feature-item">
+                    <span>📊</span>
+
+                    <div>
+                        <strong>Academic Records</strong>
+
+                        <p>
+                            Attendance, study hours, quizzes,
+                            activities and exams.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="feature-item">
+                    <span>🤖</span>
+
+                    <div>
+                        <strong>Random Forest Prediction</strong>
+
+                        <p>
+                            Identifies Low, Moderate and High
+                            academic risk.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="feature-item">
+                    <span>📖</span>
+
+                    <div>
+                        <strong>Intervention</strong>
+
+                        <p>
+                            Learning modules and module quizzes
+                            help students improve.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="feature-item">
+                    <span>📈</span>
+
+                    <div>
+                        <strong>Progress Monitoring</strong>
+
+                        <p>
+                            Track academic risk from Prelim
+                            to Finals.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

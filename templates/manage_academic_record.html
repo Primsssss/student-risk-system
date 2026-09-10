@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Academic Record | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        .record-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+            gap: 18px;
+        }
+
+        .record-section {
+            margin-top: 18px;
+        }
+
+        .record-section h2 {
+            margin-bottom: 6px;
+        }
+
+        .hint {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .factor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .factor {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .factor span {
+            display: block;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .factor strong {
+            display: block;
+            font-size: 20px;
+            margin-top: 6px;
+        }
+
+        .mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .mini-table th,
+        .mini-table td {
+            border-bottom: 1px solid #eee;
+            padding: 8px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .mini-table th {
+            font-weight: 700;
+        }
+
+        .danger {
+            color: #b00020;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .danger:hover {
+            text-decoration: underline;
+        }
+
+        .error-box {
+            padding: 12px;
+            background: #ffe9e9;
+            color: #a00000;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .success-box {
+            padding: 12px;
+            background: #e9f8ee;
+            color: #176b35;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #eee;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .empty-message {
+            color: #777;
+            font-size: 13px;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎓
+            </div>
+
+            <div>
+                <strong>ARPS</strong>
+                <small>Student Risk System</small>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-item">
+
+                🏠
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a href="{{ url_for('professors') }}"
+               class="nav-item">
+
+                👨‍🏫
+                <span>Professors</span>
+
+            </a>
+
+
+            <a href="{{ url_for('students') }}"
+               class="nav-item">
+
+                🎓
+                <span>Students</span>
+
+            </a>
+
+
+            <a href="{{ url_for('courses') }}"
+               class="nav-item">
+
+                📚
+                <span>Courses</span>
+
+            </a>
+
+
+            <a href="{{ url_for('classes') }}"
+               class="nav-item">
+
+                🏫
+                <span>Classes</span>
+
+            </a>
+
+
+            <a href="{{ url_for('academic_records') }}"
+               class="nav-item active">
+
+                📝
+                <span>Academic Records</span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                🤖
+                <span>Predictions</span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📖
+                <span>Learning Modules</span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📊
+                <span>Reports</span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                ⚙️
+                <span>Settings</span>
+
+            </a>
+
+
+        </nav>
+
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+
+            🚪
+            <span>Logout</span>
+
+        </a>
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+
+            <div>
+
+                <h1>
+                    Manage Academic Record
+                </h1>
+
+                <p>
+                    Raw academic records for
+                    <strong>
+                        {{ period["period_name"] }}
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for(
+                    'student_academic_record',
+                    class_id=record['class_id'],
+                    student_id=record['student_id']
+                ) }}"
+                class="btn">
+
+                ← Back to Academic Record
+
+            </a>
+
+
+        </header>
+
+
+        <!-- ERROR -->
+
+        {% if error %}
+
+        <div class="error-box">
+
+            {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- SUCCESS -->
+
+        {% if success %}
+
+        <div class="success-box">
+
+            {{ success }}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =================================================
+             STUDENT INFORMATION
+        ================================================== -->
+
+        <section class="dashboard-card">
+
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        Student Information
+                    </h2>
+
+                </div>
+
+                <span class="badge">
+                    {{ period["period_name"] }}
+                </span>
+
+            </div>
+
+
+            <div class="form-row">
+
+
+                <div>
+
+                    <p>
+                        <strong>Name:</strong>
+                        {{ record["first_name"] }}
+                        {{ record["last_name"] }}
+                    </p>
+
+                    <p>
+                        <strong>Student Number:</strong>
+                        {{ record["student_number"] }}
+                    </p>
+
+                    <p>
+                        <strong>Course:</strong>
+                        {{ record["course"] or "-" }}
+                    </p>
+
+                    <p>
+                        <strong>Year Level:</strong>
+                        {{ record["year_level"] or "-" }}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <p>
+                        <strong>Class:</strong>
+                        {{ record["course_code"] }}
+                        -
+                        {{ record["section"] or "-" }}
+                    </p>
+
+                    <p>
+                        <strong>Professor:</strong>
+                        {{ record["professor_first_name"] }}
+                        {{ record["professor_last_name"] }}
+                    </p>
+
+                    <p>
+                        <strong>School Year:</strong>
+                        {{ record["school_year"] or "-" }}
+                    </p>
+
+                    <p>
+                        <strong>Semester:</strong>
+                        {{ record["semester"] or "-" }}
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             AUTOMATICALLY COMPUTED FACTORS
+        ================================================== -->
+
+        <section class="dashboard-card record-section">
+
+
+            <h2>
+                Automatically Computed Academic Factors
+            </h2>
+
+
+            <p class="hint">
+
+                These values are automatically calculated
+                from the raw academic records below.
+
+                You do not need to manually enter
+                the percentages.
+
+            </p>
+
+
+            <div class="factor-grid">
+
+
+                <!-- ATTENDANCE -->
+
+                <div class="factor">
+
+                    <span>
+                        Attendance
+                    </span>
+
+                    <strong>
+
+                        {{ "%.2f"|format(
+                            factors["attendance_percentage"] or 0
+                        ) }}%
+
+                    </strong>
+
+                </div>
+
+
+                <!-- STUDY HOURS -->
+
+                <div class="factor">
+
+                    <span>
+                        Total Study Hours
+                    </span>
+
+                    <strong>
+
+                        {{ "%.2f"|format(
+                            factors["study_hours"] or 0
+                        ) }}
+
+                    </strong>
+
+                </div>
+
+
+                <!-- QUIZ -->
+
+                <div class="factor">
+
+                    <span>
+                        Quiz Average
+                    </span>
+
+                    <strong>
+
+                        {{ "%.2f"|format(
+                            factors["quiz_average"] or 0
+                        ) }}%
+
+                    </strong>
+
+                </div>
+
+
+                <!-- ACTIVITY -->
+
+                <div class="factor">
+
+                    <span>
+                        Activity Average
+                    </span>
+
+                    <strong>
+
+                        {{ "%.2f"|format(
+                            factors["activity_average"] or 0
+                        ) }}%
+
+                    </strong>
+
+                </div>
+
+
+                <!-- EXAM -->
+
+                <div class="factor">
+
+                    <span>
+                        Exam
+                    </span>
+
+                    <strong>
+
+                        {% if factors
+                              and factors["exam_percentage"]
+                              is not none %}
+
+                            {{ "%.2f"|format(
+                                factors["exam_percentage"]
+                            ) }}%
+
+                        {% else %}
+
+                            Not yet available
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             ATTENDANCE
+        ================================================== -->
+
+        <div class="record-grid">
+
+
+            <section class="dashboard-card record-section">
+
+
+                <h2>
+                    📅 Attendance
+                </h2>
+
+
+                <p class="hint">
+
+                    Record every class meeting
+                    as Present or Absent.
+
+                </p>
+
+
+                <form method="POST">
+
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="add_attendance"
+                    >
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Class Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="class_date"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Status
+                            </label>
+
+                            <select
+                                name="status"
+                                required
+                            >
+
+                                <option value="Present">
+                                    Present
+                                </option>
+
+                                <option value="Absent">
+                                    Absent
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn">
+
+                        Add Attendance
+
+                    </button>
+
+
+                </form>
+
+
+                {% if attendance_rows %}
+
+
+                <table class="mini-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for row in attendance_rows %}
+
+
+                        <tr>
+
+
+                            <td>
+                                {{ row["class_date"] }}
+                            </td>
+
+
+                            <td>
+                                {{ row["status"] }}
+                            </td>
+
+
+                            <td>
+
+                                <form method="POST">
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="delete_attendance"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="attendance_id"
+                                        value="{{ row['attendance_id'] }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="danger">
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+
+                        </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+                {% else %}
+
+                <div class="empty-message">
+
+                    No attendance records yet.
+
+                </div>
+
+                {% endif %}
+
+
+            </section>
+
+
+            <!-- =================================================
+                 STUDY HOURS
+            ================================================== -->
+
+            <section class="dashboard-card record-section">
+
+
+                <h2>
+                    ⏱️ Study Hours
+                </h2>
+
+
+                <p class="hint">
+
+                    Record the student's daily
+                    or weekly study hours.
+
+                </p>
+
+
+                <form method="POST">
+
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="add_study"
+                    >
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Study Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="study_date"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Hours
+                            </label>
+
+                            <input
+                                type="number"
+                                name="hours"
+                                min="0"
+                                step="0.25"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn">
+
+                        Add Study Hours
+
+                    </button>
+
+
+                </form>
+
+
+                {% if study_rows %}
+
+
+                <table class="mini-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Hours
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for row in study_rows %}
+
+
+                        <tr>
+
+
+                            <td>
+                                {{ row["study_date"] }}
+                            </td>
+
+
+                            <td>
+                                {{ row["hours"] }}
+                            </td>
+
+
+                            <td>
+
+                                <form method="POST">
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="delete_study"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="study_id"
+                                        value="{{ row['study_id'] }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="danger">
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+
+                        </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+                {% else %}
+
+                <div class="empty-message">
+
+                    No study-hour records yet.
+
+                </div>
+
+                {% endif %}
+
+
+            </section>
+
+
+        </div>
+
+
+        <!-- =================================================
+             QUIZZES + ACTIVITIES
+        ================================================== -->
+
+        <div class="record-grid">
+
+
+            <!-- QUIZZES -->
+
+            <section class="dashboard-card record-section">
+
+
+                <h2>
+                    📝 Quizzes
+                </h2>
+
+
+                <p class="hint">
+
+                    Enter each quiz individually.
+                    The system calculates the quiz average
+                    automatically.
+
+                </p>
+
+
+                <form method="POST">
+
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="add_quiz"
+                    >
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Quiz Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="quiz_name"
+                            placeholder="Quiz 1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Score
+                            </label>
+
+                            <input
+                                type="number"
+                                name="score"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Total Score
+                            </label>
+
+                            <input
+                                type="number"
+                                name="total_score"
+                                min="0.01"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Quiz Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="quiz_date"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn">
+
+                        Add Quiz
+
+                    </button>
+
+
+                </form>
+
+
+                {% if quiz_rows %}
+
+
+                <table class="mini-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Quiz
+                            </th>
+
+                            <th>
+                                Score
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for row in quiz_rows %}
+
+
+                        <tr>
+
+
+                            <td>
+                                {{ row["quiz_name"] }}
+                            </td>
+
+
+                            <td>
+                                {{ row["score"] }}
+                                /
+                                {{ row["total_score"] }}
+                            </td>
+
+
+                            <td>
+                                {{ row["quiz_date"] or "-" }}
+                            </td>
+
+
+                            <td>
+
+                                <form method="POST">
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="delete_quiz"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="quiz_id"
+                                        value="{{ row['quiz_id'] }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="danger">
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+
+                        </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+                {% else %}
+
+                <div class="empty-message">
+
+                    No quizzes recorded yet.
+
+                </div>
+
+                {% endif %}
+
+
+            </section>
+
+
+            <!-- ACTIVITIES -->
+
+            <section class="dashboard-card record-section">
+
+
+                <h2>
+                    📚 Activities
+                </h2>
+
+
+                <p class="hint">
+
+                    Enter each activity individually.
+                    The system calculates the activity average
+                    automatically.
+
+                </p>
+
+
+                <form method="POST">
+
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="add_activity"
+                    >
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Activity Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="activity_name"
+                            placeholder="Activity 1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Score
+                            </label>
+
+                            <input
+                                type="number"
+                                name="score"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Total Score
+                            </label>
+
+                            <input
+                                type="number"
+                                name="total_score"
+                                min="0.01"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Activity Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="activity_date"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn">
+
+                        Add Activity
+
+                    </button>
+
+
+                </form>
+
+
+                {% if activity_rows %}
+
+
+                <table class="mini-table">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Activity
+                            </th>
+
+                            <th>
+                                Score
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for row in activity_rows %}
+
+
+                        <tr>
+
+
+                            <td>
+                                {{ row["activity_name"] }}
+                            </td>
+
+
+                            <td>
+                                {{ row["score"] }}
+                                /
+                                {{ row["total_score"] }}
+                            </td>
+
+
+                            <td>
+                                {{ row["activity_date"] or "-" }}
+                            </td>
+
+
+                            <td>
+
+                                <form method="POST">
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="delete_activity"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="activity_id"
+                                        value="{{ row['activity_id'] }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="danger">
+
+                                        Delete
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+
+                        </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+                {% else %}
+
+                <div class="empty-message">
+
+                    No activities recorded yet.
+
+                </div>
+
+                {% endif %}
+
+
+            </section>
+
+
+        </div>
+
+
+        <!-- =================================================
+             EXAM
+        ================================================== -->
+
+        <section class="dashboard-card record-section">
+
+
+            <h2>
+                📊 Exam
+            </h2>
+
+
+            <p class="hint">
+
+                The exam is optional.
+                Leave it blank if the exam has not
+                been conducted yet.
+
+            </p>
+
+
+            <form method="POST">
+
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="save_exam"
+                >
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Exam Score
+                        </label>
+
+                        <input
+                            type="number"
+                            name="exam_score"
+                            min="0"
+                            step="0.01"
+
+                            value="{% if exam_rows and exam_rows[0]['score'] is not none %}{{ exam_rows[0]['score'] }}{% endif %}"
+
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Total Score
+                        </label>
+
+                        <input
+                            type="number"
+                            name="exam_total_score"
+                            min="0.01"
+                            step="0.01"
+
+                            value="{% if exam_rows and exam_rows[0]['total_score'] is not none %}{{ exam_rows[0]['total_score'] }}{% endif %}"
+
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Exam Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="exam_date"
+
+                        value="{% if exam_rows and exam_rows[0]['exam_date'] %}{{ exam_rows[0]['exam_date'] }}{% endif %}"
+
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn">
+
+                    Save Exam
+
+                </button>
+
+
+            </form>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>

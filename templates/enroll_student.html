@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Enroll Student | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎓
+            </div>
+
+            <div>
+                <strong>ARPS</strong>
+                <small>Student Risk System</small>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-item">
+                🏠
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('professors') }}"
+               class="nav-item">
+                👨‍🏫
+                <span>Professors</span>
+            </a>
+
+            <a href="{{ url_for('students') }}"
+               class="nav-item">
+                🎓
+                <span>Students</span>
+            </a>
+
+            <a href="{{ url_for('courses') }}"
+               class="nav-item">
+                📚
+                <span>Courses</span>
+            </a>
+
+            <a href="{{ url_for('classes') }}"
+               class="nav-item">
+                🏫
+                <span>Classes</span>
+            </a>
+
+            <a href="{{ url_for('academic_records') }}"
+               class="nav-item active">
+                📝
+                <span>Academic Records</span>
+            </a>
+
+            <a href="#"
+               class="nav-item">
+                🤖
+                <span>Predictions</span>
+            </a>
+
+            <a href="#"
+               class="nav-item">
+                📖
+                <span>Learning Modules</span>
+            </a>
+
+            <a href="#"
+               class="nav-item">
+                📊
+                <span>Reports</span>
+            </a>
+
+            <a href="#"
+               class="nav-item">
+                ⚙️
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+
+            🚪
+            <span>Logout</span>
+
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Enroll Student</h1>
+
+                <p>
+                    Add a student to this class.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('view_class_records', class_id=class_record['class_id']) }}"
+                class="btn">
+
+                ← Back to Class Records
+
+            </a>
+
+        </header>
+
+
+        {% if error %}
+
+        <div class="alert alert-danger">
+
+            {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- CLASS INFORMATION -->
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        {{ class_record["course_code"] }}
+                    </h2>
+
+                    <p>
+                        {{ class_record["course_title"] }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <p>
+                <strong>Professor:</strong>
+                {{ class_record["professor_first_name"] }}
+                {{ class_record["professor_last_name"] }}
+            </p>
+
+
+            <p>
+                <strong>Section:</strong>
+                {{ class_record["section"] or "-" }}
+            </p>
+
+        </section>
+
+
+        <!-- ENROLL FORM -->
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Select Student</h2>
+
+                    <p>
+                        Choose a student to enroll in this class.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if students %}
+
+            <form method="POST">
+
+
+                <div class="form-group">
+
+                    <label for="student_id">
+                        Student <span>*</span>
+                    </label>
+
+
+                    <select
+                        id="student_id"
+                        name="student_id"
+                        required>
+
+                        <option value="">
+                            Select Student
+                        </option>
+
+
+                        {% for student in students %}
+
+                        <option value="{{ student['student_id'] }}">
+
+                            {{ student["student_number"] }}
+                            -
+                            {{ student["first_name"] }}
+                            {{ student["last_name"] }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a
+                        href="{{ url_for('view_class_records', class_id=class_record['class_id']) }}"
+                        class="btn">
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Enroll Student
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div>🎓</div>
+
+                <p>
+                    No available students.
+                </p>
+
+                <small>
+                    All registered students are already enrolled
+                    in this class, or no students have been registered yet.
+                </small>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

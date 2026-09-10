@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Academic Records | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎓
+            </div>
+
+            <div>
+                <strong>ARPS</strong>
+                <small>Student Risk System</small>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-item">
+
+                🏠
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a href="{{ url_for('professors') }}"
+               class="nav-item">
+
+                👨‍🏫
+                <span>Professors</span>
+
+            </a>
+
+
+            <a href="{{ url_for('students') }}"
+               class="nav-item">
+
+                🎓
+                <span>Students</span>
+
+            </a>
+
+
+            <a href="{{ url_for('courses') }}"
+               class="nav-item">
+
+                📚
+                <span>Courses</span>
+
+            </a>
+
+
+            <a href="{{ url_for('classes') }}"
+               class="nav-item">
+
+                🏫
+                <span>Classes</span>
+
+            </a>
+
+
+            <a href="{{ url_for('academic_records') }}"
+               class="nav-item active">
+
+                📝
+                <span>Academic Records</span>
+
+            </a>
+
+
+            <a href="{{ url_for('predictions') }}"
+   class="nav-item">
+    🤖
+    <span>Predictions</span>
+</a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📖
+                <span>Learning Modules</span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📊
+                <span>Reports</span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                ⚙️
+                <span>Settings</span>
+
+            </a>
+
+        </nav>
+
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+
+            🚪
+            <span>Logout</span>
+
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Academic Records</h1>
+
+                <p>
+                    Manage student academic performance and records.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- CLASS LIST -->
+
+        <section class="dashboard-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Select a Class</h2>
+
+                    <p>
+                        Choose a class to view and manage student records.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if classes %}
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Course</th>
+
+                            <th>Professor</th>
+
+                            <th>Section</th>
+
+                            <th>School Year</th>
+
+                            <th>Semester</th>
+
+                            <th>Students</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for class in classes %}
+
+                        <tr>
+
+
+                            <td>
+
+                                <strong>
+                                    {{ class["course_code"] }}
+                                </strong>
+
+                                <br>
+
+                                <small>
+                                    {{ class["course_title"] }}
+                                </small>
+
+                            </td>
+
+
+                            <td>
+
+                                {{ class["professor_first_name"] }}
+                                {{ class["professor_last_name"] }}
+
+                            </td>
+
+
+                            <td>
+                                {{ class["section"] or "-" }}
+                            </td>
+
+
+                            <td>
+                                {{ class["school_year"] or "-" }}
+                            </td>
+
+
+                            <td>
+                                {{ class["semester"] or "-" }}
+                            </td>
+
+
+                            <td>
+                                {{ class["student_count"] }}
+                            </td>
+
+
+                            <td>
+
+                                <a
+    href="{{ url_for('view_class_records', class_id=class['class_id']) }}"
+    class="btn btn-small">
+
+    View Records
+
+</a>
+
+                            </td>
+
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="empty-state">
+
+                <div>📝</div>
+
+                <p>
+                    No classes available.
+                </p>
+
+                <small>
+                    Create a class first before managing academic records.
+                </small>
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

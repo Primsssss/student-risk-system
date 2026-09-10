@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Professor Dashboard | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎓
+            </div>
+
+            <div>
+
+                <strong>ARPS</strong>
+
+                <small>
+                    Student Risk System
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-item active">
+
+                🏠
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                👨‍🎓
+
+                <span>
+                    My Students
+                </span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📚
+
+                <span>
+                    My Classes
+                </span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📝
+
+                <span>
+                    Academic Records
+                </span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                🤖
+
+                <span>
+                    Risk Predictions
+                </span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                ⚠️
+
+                <span>
+                    At-Risk Students
+                </span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📖
+
+                <span>
+                    Learning Modules
+                </span>
+
+            </a>
+
+
+            <a href="#"
+               class="nav-item">
+
+                📊
+
+                <span>
+                    Reports
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+
+            🚪
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Professor Dashboard
+                </h1>
+
+                <p>
+                    Welcome, {{ professor["first_name"] }}!
+                </p>
+
+            </div>
+
+
+            <div class="profile-info">
+
+                <div class="profile-avatar">
+
+                    {{ professor["first_name"][0] }}
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+
+                        {{ professor["first_name"] }}
+                        {{ professor["last_name"] }}
+
+                    </strong>
+
+                    <small>
+                        Professor
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- STAT CARDS -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👨‍🎓
+                </div>
+
+                <div>
+
+                    <span>
+                        My Students
+                    </span>
+
+                    <strong>
+                        {{ student_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📚
+                </div>
+
+                <div>
+
+                    <span>
+                        My Classes
+                    </span>
+
+                    <strong>
+                        {{ class_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <span>
+                        Predictions
+                    </span>
+
+                    <strong>
+                        {{ prediction_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⚠️
+                </div>
+
+                <div>
+
+                    <span>
+                        At-Risk Students
+                    </span>
+
+                    <strong>
+                        {{ at_risk_count }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- RISK OVERVIEW -->
+
+        <section class="dashboard-grid">
+
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Student Risk Overview
+                        </h2>
+
+                        <p>
+                            Current risk distribution
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="risk-list">
+
+
+                    <div class="risk-row">
+
+                        <div>
+
+                            <span class="risk-dot low">
+                            </span>
+
+                            Low Risk
+
+                        </div>
+
+                        <strong>
+                            {{ low_risk }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="risk-row">
+
+                        <div>
+
+                            <span class="risk-dot moderate">
+                            </span>
+
+                            Moderate Risk
+
+                        </div>
+
+                        <strong>
+                            {{ moderate_risk }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="risk-row">
+
+                        <div>
+
+                            <span class="risk-dot high">
+                            </span>
+
+                            High Risk
+
+                        </div>
+
+                        <strong>
+                            {{ high_risk }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RECENT PREDICTIONS -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Recent Predictions
+                        </h2>
+
+                        <p>
+                            Latest student risk results
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if recent_predictions %}
+
+                <div class="prediction-list">
+
+                    {% for prediction in recent_predictions %}
+
+                    <div class="prediction-row">
+
+                        <div>
+
+                            <strong>
+
+                                {{ prediction["first_name"] }}
+                                {{ prediction["last_name"] }}
+
+                            </strong>
+
+                            <small>
+
+                                {{ prediction["predicted_at"] }}
+
+                            </small>
+
+                        </div>
+
+
+                        {% if prediction["risk_level"] == "High" %}
+
+                        <span class="risk-badge high-badge">
+                            High
+                        </span>
+
+                        {% elif prediction["risk_level"] == "Moderate" %}
+
+                        <span class="risk-badge moderate-badge">
+                            Moderate
+                        </span>
+
+                        {% else %}
+
+                        <span class="risk-badge low-badge">
+                            Low
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+
+                    <div>
+                        🤖
+                    </div>
+
+                    <p>
+                        No predictions yet.
+                    </p>
+
+                    <small>
+                        Predictions will appear once
+                        student records are analyzed.
+                    </small>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Quick Actions
+                    </h2>
+
+                    <p>
+                        Common professor activities
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+
+                <a href="#"
+                   class="quick-action">
+
+                    <div>
+                        👨‍🎓
+                    </div>
+
+                    <strong>
+                        View Students
+                    </strong>
+
+                    <small>
+                        View students assigned to your classes.
+                    </small>
+
+                </a>
+
+
+                <a href="#"
+                   class="quick-action">
+
+                    <div>
+                        📝
+                    </div>
+
+                    <strong>
+                        Academic Records
+                    </strong>
+
+                    <small>
+                        Manage attendance, grades and activities.
+                    </small>
+
+                </a>
+
+
+                <a href="#"
+                   class="quick-action">
+
+                    <div>
+                        🤖
+                    </div>
+
+                    <strong>
+                        Run Prediction
+                    </strong>
+
+                    <small>
+                        Analyze student academic risk.
+                    </small>
+
+                </a>
+
+
+                <a href="#"
+                   class="quick-action">
+
+                    <div>
+                        ⚠️
+                    </div>
+
+                    <strong>
+                        At-Risk Students
+                    </strong>
+
+                    <small>
+                        View students needing intervention.
+                    </small>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

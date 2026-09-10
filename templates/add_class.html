@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Class | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <strong>ARPS</strong>
+                <small>Student Risk System</small>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                🏠
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('professors') }}" class="nav-item">
+                👨‍🏫
+                <span>Professors</span>
+            </a>
+
+            <a href="{{ url_for('students') }}" class="nav-item">
+                🎓
+                <span>Students</span>
+            </a>
+
+            <a href="{{ url_for('courses') }}" class="nav-item">
+                📚
+                <span>Courses</span>
+            </a>
+
+            <a href="{{ url_for('classes') }}" class="nav-item active">
+                🏫
+                <span>Classes</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📝
+                <span>Academic Records</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                🤖
+                <span>Predictions</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📖
+                <span>Learning Modules</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📊
+                <span>Reports</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                ⚙️
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+
+        <a href="{{ url_for('logout') }}"
+           class="logout-button">
+
+            🚪
+            <span>Logout</span>
+
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Add Class</h1>
+
+                <p>
+                    Create a new class and assign a professor.
+                </p>
+
+            </div>
+
+            <a href="{{ url_for('classes') }}"
+               class="btn">
+
+                ← Back to Classes
+
+            </a>
+
+        </header>
+
+
+        <!-- ERROR MESSAGE -->
+        {% if error %}
+
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <!-- FORM CARD -->
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>Class Information</h2>
+
+                    <p>
+                        Enter the details of the new class.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form method="POST">
+
+
+                <!-- COURSE -->
+                <div class="form-group">
+
+                    <label for="course_id">
+                        Course <span>*</span>
+                    </label>
+
+                    <select
+                        id="course_id"
+                        name="course_id"
+                        required>
+
+                        <option value="">
+                            Select Course
+                        </option>
+
+                        {% for course in courses %}
+
+                        <option value="{{ course['course_id'] }}">
+
+                            {{ course['course_code'] }}
+                            -
+                            {{ course['course_title'] }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- PROFESSOR -->
+                <div class="form-group">
+
+                    <label for="professor_id">
+                        Professor <span>*</span>
+                    </label>
+
+                    <select
+                        id="professor_id"
+                        name="professor_id"
+                        required>
+
+                        <option value="">
+                            Select Professor
+                        </option>
+
+                        {% for professor in professors %}
+
+                        <option value="{{ professor['professor_id'] }}">
+
+                            {{ professor['employee_number'] }}
+                            -
+                            {{ professor['first_name'] }}
+                            {{ professor['last_name'] }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- SECTION -->
+                <div class="form-group">
+
+                    <label for="section">
+                        Section
+                    </label>
+
+                    <input
+                        type="text"
+                        id="section"
+                        name="section"
+                        placeholder="Example: A"
+                        maxlength="50">
+
+                </div>
+
+
+                <!-- SCHOOL YEAR -->
+                <div class="form-group">
+
+                    <label for="school_year">
+                        School Year
+                    </label>
+
+                    <input
+                        type="text"
+                        id="school_year"
+                        name="school_year"
+                        placeholder="Example: 2026-2027"
+                        maxlength="20">
+
+                </div>
+
+
+                <!-- SEMESTER -->
+                <div class="form-group">
+
+                    <label for="semester">
+                        Semester
+                    </label>
+
+                    <select
+                        id="semester"
+                        name="semester">
+
+                        <option value="">
+                            Select Semester
+                        </option>
+
+                        <option value="1st Semester">
+                            1st Semester
+                        </option>
+
+                        <option value="2nd Semester">
+                            2nd Semester
+                        </option>
+
+                        <option value="Summer">
+                            Summer
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="form-actions">
+
+                    <a href="{{ url_for('classes') }}"
+                       class="btn">
+
+                        Cancel
+
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Save Class
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Predictions | Student Risk System
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+
+        .prediction-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .risk-summary {
+            padding: 20px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+
+        .risk-summary span {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #64748b;
+        }
+
+        .risk-summary strong {
+            font-size: 28px;
+        }
+
+        .prediction-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .prediction-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .prediction-card h2 {
+            margin: 0 0 5px;
+            font-size: 20px;
+        }
+
+        .prediction-meta {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .risk-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .risk-moderate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .risk-high {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .prediction-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .prediction-box {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .prediction-box h3 {
+            margin: 0 0 8px;
+            font-size: 14px;
+        }
+
+        .prediction-box p {
+            margin: 0;
+            line-height: 1.6;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .weak-area-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .weak-area-list li {
+            margin-bottom: 7px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .view-record-btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 9px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+        }
+
+        .empty-state .icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 900px) {
+
+            .prediction-summary,
+            .prediction-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prediction-card-header {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎓
+            </div>
+
+            <div>
+
+                <strong>
+                    ARPS
+                </strong>
+
+                <small>
+                    Student Risk System
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="nav-item"
+            >
+                🏠
+                <span>
+                    Dashboard
+                </span>
+            </a>
+
+
+            {% if session['role'] == 'admin' %}
+
+            <a
+                href="{{ url_for('professors') }}"
+                class="nav-item"
+            >
+                👨‍🏫
+                <span>
+                    Professors
+                </span>
+            </a>
+
+
+            <a
+                href="{{ url_for('students') }}"
+                class="nav-item"
+            >
+                🎓
+                <span>
+                    Students
+                </span>
+            </a>
+
+
+            <a
+                href="{{ url_for('courses') }}"
+                class="nav-item"
+            >
+                📚
+                <span>
+                    Courses
+                </span>
+            </a>
+
+
+            <a
+                href="{{ url_for('classes') }}"
+                class="nav-item"
+            >
+                🏫
+                <span>
+                    Classes
+                </span>
+            </a>
+
+
+            <a
+                href="{{ url_for('academic_records') }}"
+                class="nav-item"
+            >
+                📝
+                <span>
+                    Academic Records
+                </span>
+            </a>
+
+            {% endif %}
+
+
+            <a
+                href="{{ url_for('predictions') }}"
+                class="nav-item active"
+            >
+                🤖
+                <span>
+                    Predictions
+                </span>
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+            >
+                📖
+                <span>
+                    Learning Modules
+                </span>
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+            >
+                📊
+                <span>
+                    Reports
+                </span>
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+            >
+                ⚙️
+                <span>
+                    Settings
+                </span>
+            </a>
+
+        </nav>
+
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="logout-button"
+        >
+            🚪
+            <span>
+                Logout
+            </span>
+        </a>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Predictions
+                </h1>
+
+                <p>
+                    View the latest academic risk predictions
+                    generated by the Random Forest model.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             RISK SUMMARY
+        ================================================== -->
+
+        <section class="prediction-summary">
+
+
+            <div class="risk-summary">
+
+                <span>
+                    Low Risk
+                </span>
+
+                <strong>
+                    {{ low_count }}
+                </strong>
+
+            </div>
+
+
+            <div class="risk-summary">
+
+                <span>
+                    Moderate Risk
+                </span>
+
+                <strong>
+                    {{ moderate_count }}
+                </strong>
+
+            </div>
+
+
+            <div class="risk-summary">
+
+                <span>
+                    High Risk
+                </span>
+
+                <strong>
+                    {{ high_count }}
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             PREDICTIONS
+        ================================================== -->
+
+        <section class="dashboard-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Academic Risk Predictions
+                    </h2>
+
+                    <p>
+                        Predictions are updated automatically
+                        when academic records are entered or changed.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if predictions %}
+
+
+                {% for item in predictions %}
+
+                    {% set prediction = item['prediction'] %}
+
+
+                    <div class="prediction-card">
+
+
+                        <!-- HEADER -->
+
+                        <div class="prediction-card-header">
+
+
+                            <div>
+
+                                <h2>
+
+                                    {{ prediction['student_first_name'] }}
+
+                                    {{ prediction['student_last_name'] }}
+
+                                </h2>
+
+
+                                <p class="prediction-meta">
+
+                                    Student No.:
+                                    {{ prediction['student_number'] }}
+
+                                    <br>
+
+
+                                    {{ prediction['course_code'] }}
+                                    —
+                                    {{ prediction['course_title'] }}
+
+                                    <br>
+
+
+                                    Section
+                                    {{ prediction['section'] or '-' }}
+
+                                    ·
+
+                                    {{ prediction['period_name'] }}
+
+                                    ·
+
+                                    SY
+                                    {{ prediction['school_year'] or '-' }}
+
+                                    ·
+
+                                    {{ prediction['semester'] or '-' }}
+
+                                </p>
+
+                            </div>
+
+
+                            <!-- RISK BADGE -->
+
+                            {% if prediction['risk_level'] == 'Low' %}
+
+                                <span class="risk-badge risk-low">
+
+                                    Low Risk
+
+                                </span>
+
+                            {% elif prediction['risk_level'] == 'Moderate' %}
+
+                                <span class="risk-badge risk-moderate">
+
+                                    Moderate Risk
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="risk-badge risk-high">
+
+                                    High Risk
+
+                                </span>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                        <!-- =================================================
+                             INFORMATION GRID
+                        ================================================== -->
+
+                        <div class="prediction-grid">
+
+
+                            <!-- DESCRIPTION -->
+
+                            <div class="prediction-box">
+
+                                <h3>
+                                    Prediction Description
+                                </h3>
+
+                                <p>
+                                    {{ prediction['description'] }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- FEEDBACK -->
+
+                            <div class="prediction-box">
+
+                                <h3>
+                                    Feedback
+                                </h3>
+
+                                <p>
+                                    {{ prediction['feedback'] }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- WEAK AREAS -->
+
+                            <div class="prediction-box">
+
+                                <h3>
+                                    Identified Weak Areas
+                                </h3>
+
+
+                                {% if item['weak_areas'] %}
+
+                                    <ul class="weak-area-list">
+
+                                        {% for area in item['weak_areas'] %}
+
+                                            <li>
+
+                                                <strong>
+                                                    {{ area['area_name'] }}
+                                                </strong>
+
+
+                                                {% if area['reason'] %}
+
+                                                    —
+                                                    {{ area['reason'] }}
+
+                                                {% endif %}
+
+                                            </li>
+
+                                        {% endfor %}
+
+                                    </ul>
+
+                                {% else %}
+
+                                    <p>
+                                        No major weak area identified.
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- PREDICTION INFO -->
+
+                            <div class="prediction-box">
+
+                                <h3>
+                                    Prediction Information
+                                </h3>
+
+                                <p>
+
+                                    Generated:
+                                    {{ prediction['predicted_at'] }}
+
+                                    <br>
+
+                                    Professor:
+                                    {{ prediction['professor_first_name'] }}
+                                    {{ prediction['professor_last_name'] }}
+
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- VIEW RECORD -->
+
+                        <a
+                            href="{{ url_for(
+                                'student_academic_record',
+                                class_id=prediction['class_id'],
+                                student_id=prediction['student_id']
+                            ) }}"
+                            class="view-record-btn"
+                        >
+
+                            View Student Academic Record →
+
+                        </a>
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <div class="empty-state">
+
+                    <div class="icon">
+                        🤖
+                    </div>
+
+
+                    <h2>
+                        No Predictions Yet
+                    </h2>
+
+
+                    <p>
+
+                        No academic prediction is available yet.
+
+                        <br>
+
+                        Add attendance, study hours, quizzes,
+                        activities, or an exam record first.
+
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

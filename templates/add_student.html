@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student | Student Risk System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6fb;
+            color: #1f2450;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 188px;
+            height: 100vh;
+            background: #27265f;
+            color: white;
+            padding: 20px 12px;
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: 8px;
+            margin-bottom: 28px;
+        }
+
+        .logo small {
+            display: block;
+            font-size: 9px;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+            padding: 10px 12px;
+            margin-bottom: 5px;
+            border-radius: 7px;
+            font-size: 12px;
+        }
+
+        .nav-item:hover {
+            background: #3a3978;
+        }
+
+        .nav-item.active {
+            background: #5957dc;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 12px;
+            right: 12px;
+        }
+
+        .main {
+            margin-left: 188px;
+            padding: 28px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .page-header p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 850px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 19px;
+        }
+
+        .card-description {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d8d8e5;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #5957dc;
+        }
+
+        .required {
+            color: #e53935;
+        }
+
+        .error {
+            background: #ffe7e7;
+            color: #b42318;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .form-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 6px;
+            padding: 11px 18px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #5957dc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4947c8;
+        }
+
+        .btn-secondary {
+            background: #eeeeF5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e1e1eb;
+        }
+
+        .hint {
+            font-size: 10px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 150px;
+            }
+
+            .main {
+                margin-left: 150px;
+                padding: 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🎓 ARPS
+            <small>Student Risk System</small>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="nav-item">
+            🏠
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('professors') }}" class="nav-item">
+            👨‍🏫
+            <span>Professors</span>
+        </a>
+
+        <a href="{{ url_for('students') }}" class="nav-item active">
+            🎓
+            <span>Students</span>
+        </a>
+
+        <a href="{{ url_for('courses') }}" class="nav-item">
+            📚
+            <span>Courses</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            📝
+            <span>Academic Records</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            🛡️
+            <span>Predictions</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            📖
+            <span>Learning Modules</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            📊
+            <span>Reports</span>
+        </a>
+
+        <a href="#" class="nav-item">
+            ⚙️
+            <span>Settings</span>
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="nav-item logout">
+            🚪
+            <span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="page-header">
+            <h1>Add Student</h1>
+            <p>Register a new student in the system.</p>
+        </div>
+
+
+        <div class="card">
+
+            <h2>Student Information</h2>
+
+            <div class="card-description">
+                Enter the student's basic information below.
+            </div>
+
+
+            {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+            {% endif %}
+
+
+            <form method="POST">
+
+                <div class="form-grid">
+
+                    <!-- STUDENT NUMBER -->
+                    <div class="form-group">
+                        <label>
+                            Student Number <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="student_number"
+                            placeholder="e.g. 2026-0001"
+                            value="{{ request.form.get('student_number', '') }}"
+                            required
+                        >
+
+                        <div class="hint">
+                            Unique student identification number.
+                        </div>
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="form-group">
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="e.g. student@gmail.com"
+                            value="{{ request.form.get('email', '') }}"
+                        >
+                    </div>
+
+
+                    <!-- FIRST NAME -->
+                    <div class="form-group">
+                        <label>
+                            First Name <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="first_name"
+                            placeholder="Enter first name"
+                            value="{{ request.form.get('first_name', '') }}"
+                            required
+                        >
+                    </div>
+
+
+                    <!-- LAST NAME -->
+                    <div class="form-group">
+                        <label>
+                            Last Name <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="last_name"
+                            placeholder="Enter last name"
+                            value="{{ request.form.get('last_name', '') }}"
+                            required
+                        >
+                    </div>
+
+
+                    <!-- COURSE -->
+                    <div class="form-group">
+                        <label>Course</label>
+
+                        <input
+                            type="text"
+                            name="course"
+                            placeholder="e.g. BSIT"
+                            value="{{ request.form.get('course', '') }}"
+                        >
+                    </div>
+
+
+                    <!-- YEAR LEVEL -->
+                    <div class="form-group">
+                        <label>Year Level</label>
+
+                        <select name="year_level">
+
+                            <option value="">Select year level</option>
+
+                            <option value="1"
+                                {% if request.form.get('year_level') == '1' %}selected{% endif %}>
+                                1st Year
+                            </option>
+
+                            <option value="2"
+                                {% if request.form.get('year_level') == '2' %}selected{% endif %}>
+                                2nd Year
+                            </option>
+
+                            <option value="3"
+                                {% if request.form.get('year_level') == '3' %}selected{% endif %}>
+                                3rd Year
+                            </option>
+
+                            <option value="4"
+                                {% if request.form.get('year_level') == '4' %}selected{% endif %}>
+                                4th Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="form-actions">
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Student
+                    </button>
+
+                    <a href="{{ url_for('students') }}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

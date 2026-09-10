@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Course | Student Risk System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <div class="brand-name">ARPS</div>
+                <div class="brand-subtitle">
+                    Student Risk System
+                </div>
+            </div>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                🏠
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('professors') }}" class="nav-item">
+                👨‍🏫
+                <span>Professors</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                🎓
+                <span>Students</span>
+            </a>
+
+            <a href="{{ url_for('courses') }}" class="nav-item active">
+                📚
+                <span>Courses</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📝
+                <span>Academic Records</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                🤖
+                <span>Predictions</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📖
+                <span>Learning Modules</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                📊
+                <span>Reports</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                ⚙️
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="{{ url_for('logout') }}" class="nav-item logout-item">
+                🚪
+                <span>Logout</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+
+    <main class="main-content">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Add Course</h1>
+
+                <p>
+                    Create a new course or subject.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- FORM CARD -->
+        <!-- ========================= -->
+
+        <section class="dashboard-card form-card">
+
+            <div class="card-header">
+
+                <h2>Course Information</h2>
+
+                <p>
+                    Enter the course details below.
+                </p>
+
+            </div>
+
+
+            <form method="POST"
+                  action="{{ url_for('add_course') }}">
+
+
+                <!-- COURSE CODE -->
+
+                <div class="form-group">
+
+                    <label for="course_code">
+                        Course Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="course_code"
+                        name="course_code"
+                        placeholder="e.g. BSIT-101"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- COURSE TITLE -->
+
+                <div class="form-group">
+
+                    <label for="course_title">
+                        Course Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="course_title"
+                        name="course_title"
+                        placeholder="e.g. Introduction to Information Technology"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        placeholder="Enter course description (optional)"
+                    ></textarea>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="form-actions">
+
+                    <a
+                        href="{{ url_for('courses') }}"
+                        class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+                        Create Course
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
